@@ -6,6 +6,14 @@
  * @package oa
  */
 require('glob.php');
+
+//leee 5.28 登陆成功后 首页会直接跳转到init
+require(DIR_LIB . DS . 'oa-user.php');
+$oa = new oauser($db);
+if($oa->get_session_login())
+    plugtourl('init.php');
+//leee end
+
 ?>
 <!DOCTYPE html>
 <html>
