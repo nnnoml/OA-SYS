@@ -47,7 +47,7 @@ if($update_flag) {
 //如果编辑成功则重新获取用户信息
 if ($self_edit_bool == true) {
     $self_user = $oauser->view_user($oauser->get_session_login());
-    echo '<script>msg(2,"修改成功","");</script>';
+    echo '<script>msg(2,"修改成功","");tourl(500,"<?php echo $page_url; ?>");</script>';
 }
 
 //如果用户信息获取失败

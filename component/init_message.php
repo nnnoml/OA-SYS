@@ -67,7 +67,7 @@ if (isset($_FILES[$upload_post_name]) == true) {
                 }
                 unset($config_uploadfile_hibit_type);
                 $file_type = substr(strrchr($_FILES[$upload_post_name]['name'], '.'), 1);
-                if (in_array($file_type, $config_uploadfile_hibit_type_arr) == false || $config_uploadfile_hibit_type_arr == null) {
+                if ($config_uploadfile_hibit_type_arr == null || in_array($file_type, $config_uploadfile_hibit_type_arr) == false ) {
                     $post_file_sha1 = sha1_file($_FILES[$upload_post_name]['tmp_name']);
 
                         //如果文件不存在，则开始转移文件
@@ -318,6 +318,7 @@ if (isset($_GET['view']) == false) {
                 var message_bool = "<?php echo $message_bool ? '2' : '1'; ?>";
                 if(message != ""){
                     msg(message_bool,message,message);
+                    tourl(500,"<?php echo $page_url; ?>");
                 }
             });
             window.onsubmit=function(){

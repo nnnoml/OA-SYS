@@ -83,7 +83,7 @@ $group_list = $oauser->view_group_list(1, 999, 0, true);
             <td></td>
             <td><div class="input-prepend"><span class="add-on"><i class="icon-user"></i></span><input type="text" class="input-small" id="add_username" placeholder="用户名"></div></td>
             <td><div class="input-prepend"><span class="add-on"><i class="icon-star"></i></span><input type="password" class="input-small" id="add_password" placeholder="密码"></div></td>
-            <td><div class="input-prepend"><span class="add-on"><i class="icon-envelope"></i></span><input type="text" class="input-small" id="add_email" placeholder="@邮箱.com"></div></td>
+            <td><div class="input-prepend"><span class="add-on"><i class="icon-envelope"></i></span><input type="text" class="input-small" id="add_email" placeholder="邮箱"></div></td>
             <td><div class="input-prepend"><span class="add-on"><i class="icon-th"></i></span><select class="input-small" id="add_group"><?php if($group_list){ foreach($group_list as $v){ ?><option value="<?php echo $v['id']; ?>"><?php echo $v['group_name']; ?></option><?php } } ?></select></div></td>
             <td><div class="input-prepend"><span class="add-on">@</span><input type="text" id="add_name" class="input-small" placeholder="昵称"></div></td>
             <td><?php  echo $ip_arr['addr']; ?></td>

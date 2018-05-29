@@ -248,6 +248,8 @@ if(isset($_GET['return']) == true){
         var message_bool = "<?php echo $message_bool ? '2' : '1'; ?>";
         if(message != ""){
             msg(message_bool,message,message);
+            if(message_bool == 2)
+                tourl(500,"<?php echo $page_url; ?>");
         }
         //单选按钮和input值关联
         $("div[data-toggle='buttons-radio'] > button").click(function(){
