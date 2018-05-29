@@ -71,7 +71,7 @@ class oapost {
         $this->db = $db;
         $this->table_name = $db->tables['posts'];
         $this->ip_id = $ip_id;
-        $this->fields = array('id', 'post_title', 'post_content', 'post_date', 'post_modified', 'post_ip', 'post_type', 'post_order', 'post_parent', 'post_user', 'post_password', 'post_name', 'post_url', 'post_status', 'post_meta');
+        $this->fields = array('id', 'post_title', 'post_content', 'post_date', 'post_modified', 'post_ip', 'post_type', 'post_order', 'post_parent', 'post_user','post_url', 'post_status', 'post_meta');
     }
 
     /**
@@ -91,7 +91,7 @@ class oapost {
      * @param string $pw 搜索密码或SHA1识别码
      * @return boolean
      */
-    public function view_list($user = null, $title = null, $content = null, $status = 'public', $type = 'text', $page = 1, $max = 10, $sort = 7, $desc = true, $parent = null, $name = '', $pw = null) {
+    public function view_list($user = null, $title = null, $content = null, $status = 'public', $type = 'text', $page = 1, $max = 10, $sort = 7, $desc = true, $parent = null) {
         $return = false;
         $sql_where = '';
         if ($title) {
@@ -115,23 +115,13 @@ class oapost {
                 $sql_where = $sql_where . ' `post_parent`=:parent AND';
             }
         }
-        if ($name !== null) {
-            //如果$name非null且非空
-            //可以提交空字符串以废除该条件
-            if ($name) {
-                $sql_where = $sql_where . ' `post_name`=:name AND';
-            }
-        } else {
-            $sql_where = $sql_where . ' `post_name` is NULL AND';
-        }
-        if ($pw !== null) {
-            $sql_where = $sql_where . ' `post_password`=:password AND';
-        }
+
         if ($status !== null) {
             $sql_where = $sql_where . ' `post_status` = :status AND';
         }
         $sql_desc = $desc ? 'DESC' : 'ASC';
-        $sql = 'SELECT `id`,`post_title`,`post_date`,`post_modified`,`post_ip`,`post_type`,`post_order`,`post_parent`,`post_user`,`post_password`,`post_name`,`post_url`,`post_status`,`post_meta` FROM `' . $this->table_name . '` WHERE ' . $sql_where . ' `post_type`=:type ORDER BY ' . $this->fields[$sort] . ' ' . $sql_desc . ' LIMIT ' . ($page - 1) * $max . ',' . $max;
+        $sql = 'SELECT `id`,`post_title`,`post_date`,`post_modified`,`post_ip`,`post_type`,`post_order`,`post_parent`,`post_user`,`post_password`,`post_url`,`post_status`,`post_meta` FROM `' . $this->table_name . '` WHERE ' . $sql_where . ' `post_type`=:type ORDER BY ' . $this->fields[$sort] . ' ' . $sql_desc . ' LIMIT ' . ($page - 1) * $max . ',' . $max;
+
         $sth = $this->db->prepare($sql);
         if ($title) {
             $sth->bindParam(':title', $title, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
@@ -145,12 +135,7 @@ class oapost {
         if ($parent !== null && $parent !== '') {
             $sth->bindParam(':parent', $parent, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
         }
-        if ($name) {
-            $sth->bindParam(':name', $name, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
-        }
-        if ($pw !== null) {
-            $sth->bindParam(':password', $pw, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
-        }
+
         if ($status !== null) {
             $sth->bindParam(':status', $status, PDO::PARAM_STR);
         }
@@ -175,7 +160,8 @@ class oapost {
      * @param string $pw 搜索密码或SHA1识别码
      * @return boolean
      */
-    public function view_list_row($user = null, $title = null, $content = null, $status = 'public', $type = 'text', $parent = null, $name = '', $pw = null) {
+    public function view_list_row($user = null, $title = null, $content = null, $status = 'public', $type = 'text', $parent = null) {
+
         $return = false;
         $sql_where = '';
         if ($title) {
@@ -189,28 +175,22 @@ class oapost {
         if ($sql_where) {
             $sql_where = '(' . substr($sql_where, 4) . ') AND';
         }
-        if ($user) {
-            $sql_where = $sql_where . ' `post_user`=:user AND';
+        if($user && $parent){
+            $sql_where = $sql_where . ' (`post_user`=:user or `post_parent`=:parent ) AND ';
         }
-        if ($parent !== null) {
-            if ($parent === '') {
-                $sql_where = $sql_where . ' `post_parent`!=0 AND';
-            } else {
-                $sql_where = $sql_where . ' `post_parent`=:parent AND';
+        else{
+            if ($user) {
+                $sql_where = $sql_where . ' `post_user`=:user AND';
+            }
+            if ($parent !== null) {
+                if ($parent === '') {
+                    $sql_where = $sql_where . ' `post_parent`!=0 AND';
+                } else {
+                    $sql_where = $sql_where . ' `post_parent`=:parent AND';
+                }
             }
         }
-        if ($name !== null) {
-            //如果$name非null且非空
-            //可以提交空字符串以废除该条件
-            if ($name) {
-                $sql_where = $sql_where . ' `post_name`=:name AND';
-            }
-        } else {
-            $sql_where = $sql_where . ' `post_name` is NULL AND';
-        }
-        if ($pw !== null) {
-            $sql_where = $sql_where . ' `post_password` = :password AND';
-        }
+
         if ($status !== null) {
             $sql_where = $sql_where . ' `post_status` = :status AND';
         }
@@ -222,26 +202,28 @@ class oapost {
         if ($content) {
             $sth->bindParam(':content', $content, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
         }
-        if ($user) {
-            $sth->bindParam(':user', $user, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
+        if($user && $parent) {
+                $sth->bindParam(':user', $user, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
+                $sth->bindParam(':parent', $parent, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
         }
-        if ($parent !== null && $parent !== '') {
-            $sth->bindParam(':parent', $parent, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
+        else{
+            if ($user)
+                $sth->bindParam(':user', $user, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
+
+            if ($parent !== null && $parent !== '')
+                $sth->bindParam(':parent', $parent, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
         }
-        if ($name) {
-            $sth->bindParam(':name', $name, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
-        }
-        if ($pw) {
-            $sth->bindParam(':password', $pw, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
-        }
+
         if ($status !== null) {
             $sth->bindParam(':status', $status, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
         }
         $type = $this->get_type($type);
         $sth->bindParam(':type', $type, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
+//        $sth->debugDumpParams();
         if ($sth->execute() == true) {
             $return = $sth->fetchColumn();
         }
+
         return $return;
     }
 
@@ -297,6 +279,7 @@ class oapost {
             return $return;
         }
         $sql = 'SELECT `' . implode('`,`', $this->fields) . '` FROM `' . $this->table_name . '` WHERE `id` = :id';
+
         $sth = $this->db->prepare($sql);
         $sth->bindParam(':id', $id, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
         if ($sth->execute() == true) {
@@ -320,9 +303,9 @@ class oapost {
      * @param string $meta 媒体文件访问头信息
      * @return int 0或记录ID
      */
-    public function add($title, $content, $type, $parent, $user, $pw, $name, $url, $status, $meta) {
+    public function add($title, $content, $type, $parent, $user, $url, $status, $meta) {
         $return = 0;
-        $sql = 'INSERT INTO `' . $this->table_name . '`(`post_title`,`post_content`,`post_date`,`post_ip`,`post_type`,`post_order`,`post_parent`,`post_user`,`post_password`,`post_name`,`post_url`,`post_status`,`post_meta`) VALUES(:title,:content,NOW(),:ip,:type,0,:parent,:user,:pw,:name,:url,:status,:meta)';
+        $sql = 'INSERT INTO `' . $this->table_name . '`(`post_title`,`post_content`,`post_date`,`post_ip`,`post_type`,`post_order`,`post_parent`,`post_user`,`post_url`,`post_status`,`post_meta`) VALUES(:title,:content,NOW(),:ip,:type,0,:parent,:user,:url,:status,:meta)';
         $sth = $this->db->prepare($sql);
         $sth->bindParam(':title', $title, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
         $sth->bindParam(':content', $content, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
@@ -331,8 +314,6 @@ class oapost {
         $sth->bindParam(':type', $type, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
         $sth->bindParam(':parent', $parent, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
         $sth->bindParam(':user', $user, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
-        $sth->bindParam(':pw', $pw, PDO::PARAM_STR);
-        $sth->bindParam(':name', $name, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
         $sth->bindParam(':url', $url, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
         $sth->bindParam(':status', $status, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);
         $sth->bindParam(':meta', $meta, PDO::PARAM_STR | PDO::PARAM_INPUT_OUTPUT);

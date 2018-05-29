@@ -87,6 +87,7 @@ class corefile {
      */
     static public function delete_file($src) {
         $re = true;
+        $src = './upload/'.$src;
         if (is_file($src)) {
             $re = unlink($src);
         }

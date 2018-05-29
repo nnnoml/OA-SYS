@@ -129,7 +129,7 @@ if(isset($_GET['return']) == true){
 ?>
 <!-- 系统设置 -->
 <h2>系统设置</h2>
-<form action="init.php?init=12&edit=1" method="post" class="form-actions">
+<form action="<?php echo $page_url; ?>&edit=1"  method="post" class="form-actions">
     <div class="control-group">
         <h4>系统综合</h4>
         <label class="control-label" for="config_web_title">网站标题，不能为空或大于150字</label>
@@ -165,13 +165,13 @@ if(isset($_GET['return']) == true){
                 <input type="text" id="config_user_timeout" name="config_user_timeout" placeholder="用户登录超时时间(秒)" value="<?php echo $oaconfig->load('USER_TIMEOUT'); ?>">
             </div>
         </div>
-        <label class="control-label" for="config_performance_scale">业绩加权(业绩最终分值将乘以该数值)</label>
-        <div class="controls">
-            <div class="input-prepend">
-                <span class="add-on"><i class="icon-random"></i></span>
-                <input type="text" id="config_performance_scale" name="config_performance_scale" placeholder="数字" value="<?php echo $oaconfig->load('PERFORMANCE_SCALE'); ?>">
-            </div>
-        </div>
+<!--        <label class="control-label" for="config_performance_scale">业绩加权(业绩最终分值将乘以该数值)</label>-->
+<!--        <div class="controls">-->
+<!--            <div class="input-prepend">-->
+<!--                <span class="add-on"><i class="icon-random"></i></span>-->
+<!--                <input type="text" id="config_performance_scale" name="config_performance_scale" placeholder="数字" value="--><?php //echo $oaconfig->load('PERFORMANCE_SCALE'); ?><!--">-->
+<!--            </div>-->
+<!--        </div>-->
         <hr>
         <h4>文件上传设置</h4>
         <label class="control-label" for="config_uploadfile_on">上传功能</label>
@@ -206,37 +206,37 @@ if(isset($_GET['return']) == true){
                 <input type="text" id="config_uploadfile_size_max" name="config_uploadfile_size_max" placeholder="KB" value="<?php echo $oaconfig->load('UPLOADFILE_SIZE_MAX'); ?>">
             </div>
         </div>
-        <hr>
-        <h4>备份设置</h4>
-        <label class="control-label" for="config_backup_auto_on">自动备份开关</label>
-        <div class="controls">
-            <div class="btn-group" data-toggle="buttons-radio">
-                <button type="button" class="btn btn-success" value="1"><i class="icon-ok icon-white"></i> 开启</button>
-                <button type="button" class="btn btn-danger" value="0"><i class="icon-off icon-white"></i> 关闭</button>
-            </div>
-            <div class="hidden">
-                <input type="text" name="config_backup_auto_on" value="<?php echo $oaconfig->load('BACKUP_AUTO_ON'); ?>">
-            </div>
-            <p>&nbsp;</p>
-        </div>
-        <label class="control-label" for="config_backup_auto_cycle">自动备份周期(天)</label>
-        <div class="controls">
-            <div class="input-prepend">
-                <span class="add-on"><i class="icon-time"></i></span>
-                <input type="text" id="config_backup_auto_cycle" name="config_backup_auto_cycle" placeholder="天数" value="<?php echo $oaconfig->load('BACKUP_AUTO_CYCLE'); ?>">
-            </div>
-        </div>
-        <label class="control-label" for="config_backup_dir">备份保存目录</label>
-        <div class="controls">
-            <div class="input-prepend">
-                <span class="add-on"><i class="icon-folder-close"></i></span>
-                <input type="text" id="config_backup_dir" name="config_backup_dir" placeholder="文件夹路径" value="<?php echo $oaconfig->load('BACKUP_DIR'); ?>">
-            </div>
-        </div>
+<!--        <hr>-->
+<!--        <h4>备份设置</h4>-->
+<!--        <label class="control-label" for="config_backup_auto_on">自动备份开关</label>-->
+<!--        <div class="controls">-->
+<!--            <div class="btn-group" data-toggle="buttons-radio">-->
+<!--                <button type="button" class="btn btn-success" value="1"><i class="icon-ok icon-white"></i> 开启</button>-->
+<!--                <button type="button" class="btn btn-danger" value="0"><i class="icon-off icon-white"></i> 关闭</button>-->
+<!--            </div>-->
+<!--            <div class="hidden">-->
+<!--                <input type="text" name="config_backup_auto_on" value="--><?php //echo $oaconfig->load('BACKUP_AUTO_ON'); ?><!--">-->
+<!--            </div>-->
+<!--            <p>&nbsp;</p>-->
+<!--        </div>-->
+<!--        <label class="control-label" for="config_backup_auto_cycle">自动备份周期(天)</label>-->
+<!--        <div class="controls">-->
+<!--            <div class="input-prepend">-->
+<!--                <span class="add-on"><i class="icon-time"></i></span>-->
+<!--                <input type="text" id="config_backup_auto_cycle" name="config_backup_auto_cycle" placeholder="天数" value="--><?php //echo $oaconfig->load('BACKUP_AUTO_CYCLE'); ?><!--">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <label class="control-label" for="config_backup_dir">备份保存目录</label>-->
+<!--        <div class="controls">-->
+<!--            <div class="input-prepend">-->
+<!--                <span class="add-on"><i class="icon-folder-close"></i></span>-->
+<!--                <input type="text" id="config_backup_dir" name="config_backup_dir" placeholder="文件夹路径" value="--><?php //echo $oaconfig->load('BACKUP_DIR'); ?><!--">-->
+<!--            </div>-->
+<!--        </div>-->
         <div>
             <p>&nbsp;</p>
             <button type="submit" class="btn btn-primary"><i class="icon-ok icon-white"></i> 修改设置</button>
-            <a href="init.php?init=12&return=1" class="btn btn-warning"><i class="icon-repeat icon-white"></i> 还原系统设置</a>
+            <a href="../init.php?init=12&return=1" class="btn btn-warning"><i class="icon-repeat icon-white"></i> 还原系统设置</a>
         </div>
     </div>
 </form>

@@ -6,11 +6,12 @@
  * @package oa
  */
 $error_arr = array(
-    'login' => '登陆失败，可能是您的用户名或密码错误！<a href="index.php" target="_self">点击这里返回登陆页面。</a>',
-    'logged' => '您还没有登陆，或者操作超时，请尝试重新登陆。<a href="index.php" target="_self">点击这里返回登陆页面。</a>',
+    'login' => '登陆失败，可能是您的用户名或密码错误！<a href="../index.php" target="_self">点击这里返回登陆页面。</a>',
+    'logged' => '您还没有登陆，或者操作超时，请尝试重新登陆。<a href="../index.php" target="_self">点击这里返回登陆页面。</a>',
     'noadmin' => '您不是管理员，无法访问该页面。',
     'selferror'=>'无法获取用户数据，请尝试重新登录。',
     'downloadfile-pw'=>'该文件被加密了，您必须输入密码才能访问。',
+    'downloadfile'=>'禁止下载。',
     'webclose'=>'网站已经关闭了。');
 ?>
 <!DOCTYPE html>
@@ -23,7 +24,7 @@ $error_arr = array(
         <meta name="author" content="">
 
         <!-- Le styles -->
-        <link href="includes/css/bootstrap.css" rel="stylesheet">
+        <link href="../includes/css/bootstrap.css" rel="stylesheet">
         <style type="text/css">
             body {
                 padding-top: 60px;
@@ -42,19 +43,19 @@ $error_arr = array(
                 }
             }
         </style>
-        <link href="includes/css/bootstrap-responsive.css" rel="stylesheet">
+        <link href="../includes/css/bootstrap-responsive.css" rel="stylesheet">
 
         <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
         <!--[if lt IE 9]>
-          <script src="includes/js/html5shiv.js"></script>
+        <script src="../includes/js/html5shiv.js"></script>
         <![endif]-->
 
         <!-- Fav and touch icons -->
-        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="includes/images/logo-144.png">
-        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="includes/images/logo-114.png">
-        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="includes/images/logo-72.png">
-        <link rel="apple-touch-icon-precomposed" href="includes/images/logo-57.png">
-        <link rel="shortcut icon" href="includes/images/logo.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../includes/images/logo-144.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../includes/images/logo-114.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../includes/images/logo-72.png">
+        <link rel="apple-touch-icon-precomposed" href="../includes/images/logo-57.png">
+        <link rel="shortcut icon" href="../includes/images/logo.png">
     </head>
 
     <body>
@@ -70,7 +71,7 @@ $error_arr = array(
                     <a class="brand" href="#">错误页面</a>
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-right">
-                            <a href="index.php" class="navbar-link"><i class="icon-off icon-white"></i> 返回首页</a>
+                            <a href="../index.php" class="navbar-link"><i class="icon-off icon-white"></i> 返回首页</a>
                         </p>
                     </div>
                 </div>
@@ -92,8 +93,8 @@ $error_arr = array(
         <!-- Le javascript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        <script src="includes/js/jquery.js"></script>
-        <script src="includes/js/bootstrap.js"></script>
+        <script src="../includes/js/jquery.js"></script>
+        <script src="../includes/js/bootstrap.js"></script>
 
     </body>
 </html>

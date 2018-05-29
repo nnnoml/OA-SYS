@@ -9,7 +9,7 @@
  * 引入用户登陆检测模块(包含全局引用)
  * @since 5
  */
-require('logged.php');
+require('common/logged.php');
 
 /**
  * 获取当前页面URL
@@ -25,11 +25,12 @@ $url = pluggeturl();
 $init_page = 0;
 if (isset($_GET['init']) == true) {
     $init_page = $_GET['init'];
-    if($init_page > 10 && $logged_admin == false){
-        plugerror('noadmin');
+    if($init_page >= 5 && $logged_admin == false){
+        plugtourl('../common/error.php?e=noadmin');
     }
 }
-$init_page_arr = array('center', 'message', 'disk_user', 'task_user', 'performance', 'diary', 'address_book', 'self', 'disk_share', 'task_center', 'message_board', 'message_center', 'system', 'backup', 'user', 'user_group');
+//$init_page_arr = array('center', 'message', 'disk_user', 'task_user', 'performance', 'diary', 'address_book', 'self', 'disk_share', 'task_center', 'message_board', 'message_center', 'system', 'backup', 'user', 'user_group');
+$init_page_arr = array('center','message','send','address', 'self','message_center', 'system', 'user', 'user_group');
 if (isset($init_page_arr[$init_page]) == false) {
     $init_page = 0;
 }
@@ -54,39 +55,15 @@ require(DIR_LIB . DS . 'oa-post.php');
 $oapost = new oapost($db, $ip_arr['id']);
 
 /**
- * 计算用户消息提示
+ * 计算收件箱数量
  * @since 10
  */
-$tip_message_row = $oapost->view_list_row(null, null, null, 'private', 'message', null, $post_user);
-
+$tip_message_row = $oapost->view_list_row(null,null, null, 'private', 'message',$post_user);
 /**
- * 计算可接收生产任务个数
- * @since 12
+ * 计算已发送数量
+ * @since 10
  */
-$tip_task_center_row = $oapost->view_list_row(null, null, null, 'public', 'task', 0);
-
-/**
- * 计算正在进行的生产任务个数
- * @since 12
- */
-$tip_task_user_row = $oapost->view_list_row($post_user, null, null, 'public', 'task', '');
-
-/**
- * 自动备份
- * @since 15
- */
-$config_backup_auto_on = $oaconfig->load('BACKUP_AUTO_ON');
-$config_backup_date = '';
-if ($config_backup_auto_on && isset($_GET['auto']) == false && isset($_SESSION['backup-auto']) == false) {
-    $config_backup_date = $oaconfig->load('BACKUP_LAST_DATE');
-    $config_backup_date_time = mktime(0, 0, 0, (int) substr($config_backup_date, 4, 2), (int) substr($config_backup_date, 6, 2), (int) substr($config_backup_date, 0, 4));
-    $backup_auto_cycle = (int) ((int) time() - $config_backup_date_time) / 86400;
-    $config_backup_auto_cycle = (int) $oaconfig->load('BACKUP_AUTO_CYCLE');
-    if ($backup_auto_cycle > $config_backup_auto_cycle) {
-        $_SESSION['backup-auto'] = 1;
-        plugtourl('init.php?init=13&auto=1');
-    }
-}
+$tip_send_row = $oapost->view_list_row($post_user,null, null, 'private', 'message',null);
 ?>
 
 <!DOCTYPE html>
@@ -179,39 +156,40 @@ if ($config_backup_auto_on && isset($_GET['auto']) == false && isset($_SESSION['
                     <div class="nav-collapse collapse">
                         <p class="navbar-text pull-right">
                             欢迎您  <b><?php $hello_user = $oauser->view_user($oauser->get_session_login()); if($hello_user){ echo $hello_user['user_name']; } unset($hello_user); ?></b>  您的IP地址 : <?php echo $ip_arr['addr']; ?>  
-                            <a href="logout.php" class="navbar-link"><i class="icon-off icon-white"></i> 退出登陆</a>
+                            <a href="common/logout.php" class="navbar-link"><i class="icon-off icon-white"></i> 退出登陆</a>
                         </p>
                         <ul class="nav">
                             <li class="active"><a href="init.php"><i class="icon-home icon-white"></i> 主页</a></li>
                             <li class="dropdown">
                                 <a  href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> 个人中心<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="init.php?init=1"><i class="icon-envelope"></i> 个人消息</a></li>
-                                    <li><a href="init.php?init=2"><i class="icon-hdd"></i> 网络硬盘</a></li>
-                                    <li><a href="init.php?init=3"><i class="icon-list-alt"></i> 计划任务</a></li>
-                                    <li><a href="init.php?init=4"><i class="icon-check"></i> 业绩考评</a></li>
-                                    <li><a href="init.php?init=5"><i class="icon-pencil"></i> 工作日记</a></li>
-                                    <li><a href="init.php?init=6"><i class="icon-book"></i> 通讯录</a></li>
-                                    <li><a href="init.php?init=7"><i class="icon-user"></i> 修改信息</a></li>
+                                    <li><a href="init.php?init=1"><i class="icon-envelope"></i> 收件箱</a></li>
+                                    <li><a href="init.php?init=2"><i class="icon-envelope"></i> 已发送</a></li>
+<!--                                    <li><a href="init.php?init=2"><i class="icon-hdd"></i> 网络硬盘</a></li>-->
+<!--                                    <li><a href="init.php?init=3"><i class="icon-list-alt"></i> 计划任务</a></li>-->
+<!--                                    <li><a href="init.php?init=4"><i class="icon-check"></i> 业绩考评</a></li>-->
+<!--                                    <li><a href="init.php?init=5"><i class="icon-pencil"></i> 工作日记</a></li>-->
+                                    <li><a href="init.php?init=3"><i class="icon-book"></i> 通讯录</a></li>
+                                    <li><a href="init.php?init=4"><i class="icon-user"></i> 修改信息</a></li>
                                 </ul>
                             </li>
-                            <li class="dropdown">
-                                <a  href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-retweet icon-white"></i> 共享协作<b class="caret"></b></a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="init.php?init=8"><i class="icon-share"></i> 文件共享中心</a></li>
-                                    <li><a href="init.php?init=9"><i class="icon-tasks"></i> 生产任务中心</a></li>
-                                    <li><a href="init.php?init=10"><i class="icon-comment"></i> 公共留言薄</a></li>
-                                </ul>
-                            </li>
+<!--                            <li class="dropdown">-->
+<!--                                <a  href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-retweet icon-white"></i> 共享协作<b class="caret"></b></a>-->
+<!--                                <ul class="dropdown-menu">-->
+<!--                                    <li><a href="init.php?init=8"><i class="icon-share"></i> 文件共享中心</a></li>-->
+<!--<!--                                    <li><a href="init.php?init=9"><i class="icon-tasks"></i> 生产任务中心</a></li>-->-->
+<!--<!--                                    <li><a href="init.php?init=10"><i class="icon-comment"></i> 公共留言薄</a></li>-->-->
+<!--                                </ul>-->
+<!--                            </li>-->
                             <?php if($logged_admin == true){ ?>
                             <li class="dropdown">
                                 <a  href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-wrench icon-white"></i> 系统<b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li><a href="init.php?init=11"><i class="icon-envelope"></i> 消息中心</a></li>
-                                    <li><a href="init.php?init=12"><i class="icon-asterisk"></i> 系统设置</a></li>
-                                    <li><a href="init.php?init=13"><i class="icon-random"></i> 备份和恢复</a></li>
-                                    <li><a href="init.php?init=14" target="_self"><i class="icon-user"></i> 用户管理</a></li>
-                                    <li><a href="init.php?init=15" target="_self"><i class="icon-th-large"></i> 用户组管理</a></li>
+<!--                                    <li><a href="init.php?init=5"><i class="icon-envelope"></i> 消息中心</a></li>-->
+                                    <li><a href="init.php?init=6"><i class="icon-asterisk"></i> 系统设置</a></li>
+<!--                                    <li><a href="init.php?init=13"><i class="icon-random"></i> 备份和恢复</a></li>-->
+                                    <li><a href="init.php?init=7" target="_self"><i class="icon-user"></i> 用户管理</a></li>
+                                    <li><a href="init.php?init=8" target="_self"><i class="icon-th-large"></i> 用户组管理</a></li>
                                 </ul>
                             </li>
                             <?php } ?>
@@ -227,24 +205,25 @@ if ($config_backup_auto_on && isset($_GET['auto']) == false && isset($_SESSION['
                     <div class="well sidebar-nav">
                         <ul class="nav nav-list">
                             <li class="nav-header">个人中心</li>
-                            <li><a href="init.php?init=1"><i class="icon-envelope"></i> 个人消息 <?php if($tip_message_row>0){ ?><span class="badge badge-info"><?php echo $tip_message_row; ?></span><?php } ?></a></li>
-                            <li><a href="init.php?init=2"><i class="icon-hdd"></i> 网络硬盘</a></li>
-                            <li><a href="init.php?init=3"><i class="icon-list-alt"></i> 计划任务 <?php if($tip_task_user_row>0){ ?><span class="badge badge-info"><?php echo $tip_task_user_row; ?></span><?php } ?></a></li>
-                            <li><a href="init.php?init=4"><i class="icon-check"></i> 业绩考评</a></li>
-                            <li><a href="init.php?init=5"><i class="icon-pencil"></i> 工作日记</a></li>
-                            <li><a href="init.php?init=6"><i class="icon-book"></i> 通讯录</a></li>
-                            <li><a href="init.php?init=7"><i class="icon-user"></i> 修改信息</a></li>
-                            <li class="nav-header">共享协作</li>
-                            <li><a href="init.php?init=8"><i class="icon-share"></i> 文件共享中心</a></li>
-                            <li><a href="init.php?init=9"><i class="icon-tasks"></i> 生产任务中心 <?php if($tip_task_center_row>0){ ?><span class="badge badge-Inverse"><?php echo $tip_task_center_row; ?></span><?php } ?></a></li>
-                            <li><a href="init.php?init=10"><i class="icon-comment"></i> 公共留言薄</a></li>
+                            <li><a href="init.php?init=1"><i class="icon-envelope"></i> 收件箱 <?php if($tip_message_row>0){ ?><span class="badge badge-info"><?php echo $tip_message_row; ?></span><?php } ?></a></li>
+                            <li><a href="init.php?init=2"><i class="icon-envelope"></i> 已发送 <?php if($tip_send_row>0){ ?><span class="badge badge-info"><?php echo $tip_send_row; ?></span><?php } ?></a></li>
+<!--                            <li><a href="init.php?init=2"><i class="icon-hdd"></i> 网络硬盘</a></li>-->
+<!--                            <li><a href="init.php?init=3"><i class="icon-list-alt"></i> 计划任务 --><?php //if($tip_task_user_row>0){ ?><!--<span class="badge badge-info">--><?php //echo $tip_task_user_row; ?><!--</span>--><?php //} ?><!--</a></li>-->
+<!--                            <li><a href="init.php?init=4"><i class="icon-check"></i> 业绩考评</a></li>-->
+<!--                            <li><a href="init.php?init=5"><i class="icon-pencil"></i> 工作日记</a></li>-->
+                            <li><a href="init.php?init=3"><i class="icon-book"></i> 通讯录</a></li>
+                            <li><a href="init.php?init=4"><i class="icon-user"></i> 修改信息</a></li>
+<!--                            <li class="nav-header">共享协作</li>-->
+<!--                            <li><a href="init.php?init=8"><i class="icon-share"></i> 文件共享中心</a></li>-->
+<!--                            <li><a href="init.php?init=9"><i class="icon-tasks"></i> 生产任务中心 --><?php //if($tip_task_center_row>0){ ?><!--<span class="badge badge-Inverse">--><?php //echo $tip_task_center_row; ?><!--</span>--><?php //} ?><!--</a></li>-->
+<!--                            <li><a href="init.php?init=10"><i class="icon-comment"></i> 公共留言薄</a></li>-->
                             <?php if($logged_admin == true){ ?>
                             <li class="nav-header">系统</li>
-                            <li><a href="init.php?init=11"><i class="icon-envelope"></i> 消息中心</a></li>
-                            <li><a href="init.php?init=12"><i class="icon-asterisk"></i> 系统设置</a></li>
-                            <li><a href="init.php?init=13"><i class="icon-random"></i> 备份和恢复</a></li>
-                            <li><a href="init.php?init=14" target="_self"><i class="icon-user"></i> 用户管理</a></li>
-                            <li><a href="init.php?init=15" target="_self"><i class="icon-th-large"></i> 用户组管理</a></li>
+<!--                            <li><a href="init.php?init=5"><i class="icon-envelope"></i> 消息中心</a></li>-->
+                            <li><a href="init.php?init=6"><i class="icon-asterisk"></i> 系统设置</a></li>
+<!--                            <li><a href="init.php?init=13"><i class="icon-random"></i> 备份和恢复</a></li>-->
+                            <li><a href="init.php?init=7" target="_self"><i class="icon-user"></i> 用户管理</a></li>
+                            <li><a href="init.php?init=8" target="_self"><i class="icon-th-large"></i> 用户组管理</a></li>
                             <?php } ?>
                         </ul>
                     </div><!--/.well -->
@@ -256,7 +235,7 @@ if ($config_backup_auto_on && isset($_GET['auto']) == false && isset($_SESSION['
                      * 引入内部内容
                      * @since 4
                      */
-                    require('init_' . $init_page_arr[$init_page] . '.php');
+                    require(DIR_COMP.'/init_' . $init_page_arr[$init_page] . '.php');
                     ?>
                 </div><!--/span-->
             </div><!--/row-->

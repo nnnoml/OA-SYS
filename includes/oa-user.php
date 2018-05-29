@@ -169,7 +169,7 @@ class oauser {
      */
     public function view_user($id) {
         $return = false;
-        $sql = 'SELECT `id`,`user_username`,`user_email`,`user_name`,`user_group`,`user_date`,`user_login_date`,`user_ip`,`user_status` FROM `' . $this->table_name_user . '` WHERE `id`=:id';
+        $sql = 'SELECT `id`,`user_username`,`user_password`,`user_email`,`user_name`,`user_group`,`user_date`,`user_login_date`,`user_ip`,`user_status` FROM `' . $this->table_name_user . '` WHERE `id`=:id';
         $sth = $this->db->prepare($sql);
         $sth->bindParam(':id', $id, PDO::PARAM_INT | PDO::PARAM_INPUT_OUTPUT);
         if ($sth->execute() == true) {
@@ -225,8 +225,10 @@ class oauser {
     public function login($user, $pass, $ip_id, $remember = false) {
         $return = false;
         if ($this->check_username($user) == true && $this->check_password($pass) == true) {
+
             $pass_sha1 = $this->get_password_sha1($pass);
             $session_id = $this->get_session_id();
+
             //判断session是否存在
             if ($session_id) {
                 //判断用户是否存在以及密码是否匹配
@@ -656,8 +658,26 @@ class oauser {
      * @param string $password 密码明文
      * @return string
      */
-    private function get_password_sha1($password) {
+    public function get_password_sha1($password) {
         return sha1($password);
+    }
+
+    /**
+     * 判断用户是否可以下载
+     * @param $fid 信息id
+     * @param $uid 用户id
+     * @return bool 返回布尔
+     */
+    public function downloadCheck($fid,$uid){
+        $return = false;
+        $sql = "SELECT * FROM `oa_posts` WHERE id = $fid and (post_user = $uid or  post_parent = $uid)";
+
+        $sth = $this->db->prepare($sql);
+
+        if ($sth->execute() == true) {
+            $return = $sth->fetch(PDO::FETCH_ASSOC);
+        }
+        return $return;
     }
 
 }

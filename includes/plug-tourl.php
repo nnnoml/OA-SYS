@@ -9,6 +9,7 @@
  */
 function plugtourl($url) {
     header('Location:' . $url);
+    exit;
 }
 
 ?>

@@ -23,5 +23,5 @@ require(DIR_LIB . DS . 'oa-user.php');
  */
 $oauser = new oauser($db);
 $oauser->logout($ip_arr['id']);
-plugtourl('index.php');
+plugtourl('../');
 ?>

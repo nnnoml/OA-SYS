@@ -22,21 +22,24 @@ require(DIR_LIB . DS . 'oa-user.php');
  * 检查变量存在并转移给user类
  * @since 3
  */
-if (isset($_POST['user']) == true && isset($_POST['pass']) == true && isset($_POST['vcode']) == true) {
-    if ($_POST['vcode'] == $_SESSION['vcode']) {
+//if (isset($_POST['user']) == true && isset($_POST['pass']) == true && isset($_POST['vcode']) == true) {
+//    if ($_POST['vcode'] == $_SESSION['vcode']) {
+if (isset($_POST['user']) == true && isset($_POST['pass']) == true) {
+
         $remember = false;
         if (isset($_POST['remeber']) == true) {
             $remember = true;
         }
         $user = new oauser($db);
         $login_bool = $user->login($_POST['user'], $_POST['pass'], $ip_arr['id'], $remember);
+
         if ($login_bool == true) {
-            plugtourl('init.php');
+            plugtourl('../init.php');
         } else {
-            plugtourl('error.php?e=login');
+            plugtourl('../common/error.php?e=login');
         }
     } else {
-        plugtourl('error.php?e=login-vcode');
+        plugtourl('../common/error.php?e=login-vcode');
     }
-}
+//}
 ?>

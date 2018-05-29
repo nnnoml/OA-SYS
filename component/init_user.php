@@ -95,10 +95,10 @@ $group_list = $oauser->view_group_list(1, 999, 0, true);
 <!-- 页码 -->
 <ul class="pager">
     <li class="previous<?php if($page<=1){ echo ' disabled'; } ?>">
-        <a href="init.php?init=14&page=<?php echo $page_prev; ?>">&larr; 上一页</a>
+        <a href="<?php echo $page_url.'&page='.$page_prev; ?>">&larr; 上一页</a>
     </li>
     <li class="next<?php if($page>=$page_max){ echo ' disabled'; } ?>">
-        <a href="init.php?init=14&page=<?php echo $page_next; ?>">下一页 &rarr;</a>
+        <a href="<?php echo $page_url.'&page='.$page_next; ?>">下一页 &rarr;</a>
     </li>
 </ul>
 
@@ -163,7 +163,7 @@ $group_list = $oauser->view_group_list(1, 999, 0, true);
 <!-- Javascript -->
 <script>
     $(document).ready(function(){
-        var ajax_page = "ajax_user.php";
+        var ajax_page = "common/ajax_user.php";
         //添加用户
         $("button[href='#add']").click(function(){
             $.post(ajax_page,{
@@ -174,7 +174,8 @@ $group_list = $oauser->view_group_list(1, 999, 0, true);
                 "add_group":$("#add_group").val()
             },function(data){
                 msg(data,"添加用户成功！","无法添加用户，请检查您输入的用户名、密码、邮箱等信息是否正确。");
-                tourl(1500,"init.php?init=14");
+                if(data == 2)
+                    tourl(500,"<?php echo $page_url; ?>");
             });
         });
         //编辑用户
@@ -220,7 +221,7 @@ $group_list = $oauser->view_group_list(1, 999, 0, true);
         $("button[href='#del']").click(function(){
             var ev = $(this).parent().parent().parent().children();
             $("#user_list").data("del",$(ev).html());
-            $.get("ajax_user.php?del="+$("#user_list").data("del"),function(data){
+            $.get(ajax_page+"?del="+$("#user_list").data("del"),function(data){
                 msg(data,"删除成功！","无法删除该用户，系统必须至少存在一个用户！");
                 if(data=="2"){
                     $(ev).parent("tr").remove();

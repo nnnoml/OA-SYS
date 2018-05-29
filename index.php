@@ -5,7 +5,7 @@
  * @version 7
  * @package oa
  */
-require('glob.php');
+require('common/glob.php');
 
 //leee 5.28 登陆成功后 首页会直接跳转到init
 require(DIR_LIB . DS . 'oa-user.php');
@@ -30,7 +30,7 @@ if($oa->get_session_login())
             body {
                 padding-top: 40px;
                 padding-bottom: 40px;
-                background-image: url(includes/images/login-bg.png);
+                /*background-image: url(includes/images/login-bg.png);*/
                 background-repeat: no-repeat;
                 background-size: 100% auto;
             }
@@ -81,15 +81,15 @@ if($oa->get_session_login())
 
         <div class="container">
 
-            <form class="form-signin" action="login.php" method="post">
+            <form class="form-signin" action="common/login.php" method="post">
                 <h2 class="form-signin-heading"><?php echo $website_title; ?></h2>
                 <input name="user" type="text" class="input-block-level" placeholder="用户名" value="">
                 <input name="pass" type="password" class="input-block-level" placeholder="密码" value="">
-                <input name="vcode" type="text" class="input-block-level" placeholder="验证码" value="">
-                <a href="#"><img onclick="javascript:$('img').attr('src', 'vcode.php?r=' + Math.random());" src="vcode.php" style="width:150px;height:35px;"></a>
-                <label class="checkbox">
-                    <input name="remember" type="checkbox" value="remember-me"> 记住我
-                </label>
+<!--                <input name="vcode" type="text" class="input-block-level" placeholder="验证码" value="">-->
+<!--                <a href="#"><img onclick="javascript:$('img').attr('src', 'vcode.php?r=' + Math.random());" src="vcode.php" style="width:150px;height:35px;"></a>-->
+<!--                <label class="checkbox">-->
+<!--                    <input name="remember" type="checkbox" value="remember-me"> 记住我-->
+<!--                </label>-->
                 <button class="btn btn-large btn-primary" type="submit">登陆</button>
             </form>
 

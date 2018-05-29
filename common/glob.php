@@ -10,9 +10,13 @@
  * 相对路径定义
  * @since 1
  */
+define('BASE_PATH',dirname(str_replace('\\','/',realpath(dirname(__FILE__).'/'))."/"));
 define('DS', '/');
-define('DIR_LIB', 'includes');
-define('DIR_DATA', 'content');
+define('DIR_LIB', BASE_PATH.'/includes');
+define('DIR_DATA', BASE_PATH.'/content');
+define('DIR_COMP', BASE_PATH.'/component');
+define('DIR_COMM', BASE_PATH.'/common');
+define('DIR_UPLOAD', BASE_PATH.'/upload');
 
 /**
  * 设定时区
@@ -43,13 +47,6 @@ require(DIR_DATA . DS . 'configs' . DS . 'db.inc.php');
  * @since 7
  */
 require(DIR_LIB . DS . 'plug-tourl.php');
-
-/**
- * 引入错误处理模块
- * @since 7
- */
-require(DIR_LIB . DS . 'core-error.php');
-require(DIR_LIB . DS . 'plug-error.php');
 
 /**
  * 引入并初始化数据库连接<br/>
@@ -90,12 +87,6 @@ $log = new corelog($ip_arr['addr'], $db, true);
 $website_title = $oaconfig->load('WEB_TITLE');
 //页脚信息
 $website_footer = $oaconfig->load('PAGE_FOOTER_COPYRIGHT');
-
-/**
- * 上传文件存储路径
- * @since 8
- */
-define('UPLOADFILE_DIR', DIR_DATA . DS . 'files');
 
 /**
  * 获取网站URL

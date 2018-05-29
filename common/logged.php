@@ -39,7 +39,7 @@ if ($oauser->status($ip_arr['id'], $config_user_timeout) == true) {
     }
 } else {
     //如果尚未登陆处理
-    plugerror('logged');
+    plugtourl('../common/error.php?e=logged');
 }
 unset($config_user_timeout);
 
@@ -49,6 +49,6 @@ unset($config_user_timeout);
  */
 $website_on = $oaconfig->load('WEB_ON');
 if (!$website_on && !$logged_admin) {
-    plugerror('webclose');
+    plugtourl('../common/error.php?e=webclose');
 }
 ?>

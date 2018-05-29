@@ -8,41 +8,56 @@
 if (isset($init_page) == false) {
     die();
 }
-
 /**
  * 获取用户信息
  */
 $self_user = $oauser->view_user($oauser->get_session_login());
-
 /**
  * 编辑用户信息
  */
 //编辑是否成功标记
-$self_edit_bool = false;
-if (isset($_POST['edit_email']) == true && isset($_POST['edit_name']) == true) {
-    $password = null;
-    //如果提交了密码
-    if (isset($_POST['edit_password']) == true && isset($_POST['edit_new_password']) == true && isset($_POST['edit_new_password2']) == true) {
-        if ($_POST['edit_new_password'] === $_POST['edit_new_password2']) {
-            $password = $_POST['edit_new_password'];
+$self_edit_bool = false; //更新状态
+$update_flag = false; //更新许可
+$password = null; //新密码
+
+if (isset($_POST['edit_email'])  && isset($_POST['edit_name']) && ($_POST['edit_email'] != $self_user['user_email'] || $_POST['edit_name'] != $self_user['user_name']) ) {
+    $update_flag = true;
+}
+//如果提交了密码
+if (isset($_POST['edit_password']) && !empty($_POST['edit_password'])) {
+
+    if ($oauser->get_password_sha1($_POST['edit_password']) != $self_user['user_password']) {
+        echo '<script>msg(1,"","旧密码验证失败");</script>';
+    }
+    else {
+        if( isset($_POST['edit_new_password']) && !empty($_POST['edit_new_password']) && isset($_POST['edit_new_password2']) && !empty($_POST['edit_new_password2']) ){
+            if ($_POST['edit_new_password'] == $_POST['edit_new_password2']) {
+                $password = $_POST['edit_new_password'];
+                $update_flag = true;
+            }
+            else echo '<script>msg(1,"","两次密码不一致");</script>';
         }
     }
+}
+
+if($update_flag) {
     $self_edit_bool = $oauser->edit_user($self_user['id'], $self_user['user_username'], $password, $_POST['edit_email'], $_POST['edit_name'], $self_user['user_group']);
 }
 
 //如果编辑成功则重新获取用户信息
 if ($self_edit_bool == true) {
     $self_user = $oauser->view_user($oauser->get_session_login());
+    echo '<script>msg(2,"修改成功","");</script>';
 }
 
 //如果用户信息获取失败
 if (!$self_user) {
-    plugerror('selferror');
+    plugtourl('../common/error.php?e=selferror');
 }
 ?>
 <!-- 管理表格 -->
 <h2>修改个人信息</h2>
-<form action="init.php?init=7" method="post" class="form-actions">
+<form action="<?php echo $page_url; ?>" method="post" class="form-actions">
     <div class="control-group">
         <label class="control-label" for="edit_email">邮箱</label>
         <div class="controls">
@@ -96,11 +111,6 @@ if (!$self_user) {
         //默认值
         var default_email = "<?php echo $self_user['user_email']; ?>";
         var default_name = "<?php echo $self_user['user_name']; ?>";
-        var is_edit = <?php if(isset($_POST['edit_email']) == true){ echo 'true'; }else{ echo 'false'; } ?>;
-        var is_edit_r = "<?php if($self_edit_bool == true){ echo '2'; }else{ echo '1'; } ?>";
-        if(is_edit){
-            msg(is_edit_r,"修改用户信息成功！","无法修改用户信息，请稍候重试。");
-        }
         //复原按钮事件
         $("button[href='#return']").click(function() {
             $("#edit_email").val(default_email);

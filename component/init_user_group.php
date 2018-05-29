@@ -39,7 +39,7 @@ $page_next = $page+1;
 /**
  * 获取用户组列表
  */
-$group_list = $oauser->view_group_list($page);
+$group_list = $oauser->view_group_list($page,$max);
 ?>
 <h2>用户组管理</h2>
 <table class="table table-hover table-bordered table-striped">
@@ -75,10 +75,10 @@ $group_list = $oauser->view_group_list($page);
 <!-- 页码 -->
 <ul class="pager">
     <li class="previous<?php if($page<=1){ echo ' disabled'; } ?>">
-        <a href="init.php?init=15&page=<?php echo $page_prev; ?>">&larr; 上一页</a>
+        <a href="<?php echo $page_url.'&page='.$page_prev; ?>">&larr; 上一页</a>
     </li>
     <li class="next<?php if($page>=$page_max){ echo ' disabled'; } ?>">
-        <a href="init.php?init=15&page=<?php echo $page_next; ?>">下一页 &rarr;</a>
+        <a href="<?php echo $page_url.'&page='.$page_next; ?>">下一页 &rarr;</a>
     </li>
 </ul>
 
@@ -126,14 +126,16 @@ $group_list = $oauser->view_group_list($page);
 <!-- Javascript -->
 <script>
     $(document).ready(function(){
+        var ajax_page = "common/ajax_user_group.php";
         //添加按钮事件
     $("button[href='#add']").click(function(){
-        $.post("ajax_user_group.php",{
+        $.post(ajax_page,{
             "add_name":$("#add_name").val(),
             "add_power":$("#add_power").val()
         },function(data){
             msg(data,"添加成功！","无法添加新的用户组，请检查您输入的用户组名称、权限是否正确！");
-            tourl(1500,"init.php?init=15");
+            if(data == 2)
+               tourl(500,"<?php echo $page_url; ?>");
         });
     });
     
@@ -141,7 +143,7 @@ $group_list = $oauser->view_group_list($page);
     $("button[class='btn btn-danger']").click(function(){
         var ev = $(this).parent().parent().parent().children();
         $("#group_list").data("del",$(ev).html());
-       $.get("ajax_user_group.php?del="+$("#group_list").data("del"),function(data){
+       $.get(ajax_page+"?del="+$("#group_list").data("del"),function(data){
            msg(data,"删除成功！","无法删除该用户组，请确保系统至少存在一个用户组，同时您不能删除系统默认组！");
            if(data=="2"){
                $(ev).parent("tr").remove();
@@ -172,7 +174,7 @@ $group_list = $oauser->view_group_list($page);
     
     //编辑保存按钮事件
     $("button[href='#edit_save']").click(function(){
-        $.post("ajax_user_group.php",{
+        $.post(ajax_page,{
             "edit_id":$("#group_edit").data("edit_id"),
             "edit_name":$("#edit_name").val(),
             "edit_power":$("#edit_power").val(),

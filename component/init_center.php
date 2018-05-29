@@ -32,28 +32,28 @@ if ($system_message_list) {
     $system_message_view = $oapost->view($system_message_list[0]['id']);
 }
 unset($system_message_list);
-
-/**
- * 计算任务信息
- * @since 1
- */
-$task_user_count = $oapost->view_list_row($post_user, null, null, 'public-finish', 'task', '');
-if(!$task_user_count){
-    $task_user_count = 0;
-}
-$task_count = $oapost->view_list_row(null, null, null, 'public', 'task', 0);
-if(!$task_count){
-    $task_count = 0;
-}
-
-/**
- * 计算业绩
- * @since 1
- */
-$performance_count = $oapost->sum_fields('performance', $post_user, 'post_url');
-$date_mouth_start = date('Y-m') . '-00 00:00:00';
-$date_mouth_end = date('Y') . '-' . ((int) date('m') + 1) . '-00 00:00:00';
-$performance_mouth_count = $oapost->sum_fields('performance', $post_user, 'post_url', $date_mouth_start, $date_mouth_end);
+//
+///**
+// * 计算任务信息
+// * @since 1
+// */
+//$task_user_count = $oapost->view_list_row($post_user, null, null, 'public-finish', 'task', '');
+//if(!$task_user_count){
+//    $task_user_count = 0;
+//}
+//$task_count = $oapost->view_list_row(null, null, null, 'public', 'task', 0);
+//if(!$task_count){
+//    $task_count = 0;
+//}
+//
+///**
+// * 计算业绩
+// * @since 1
+// */
+//$performance_count = $oapost->sum_fields('performance', $post_user, 'post_url');
+//$date_mouth_start = date('Y-m') . '-00 00:00:00';
+//$date_mouth_end = date('Y') . '-' . ((int) date('m') + 1) . '-00 00:00:00';
+//$performance_mouth_count = $oapost->sum_fields('performance', $post_user, 'post_url', $date_mouth_start, $date_mouth_end);
 ?>
 <!-- 欢迎界面 -->
 <?php if($system_message_view){ ?>
@@ -66,21 +66,21 @@ $performance_mouth_count = $oapost->sum_fields('performance', $post_user, 'post_
 
 <!-- 消息 -->
 <ul class="thumbnails">
-    <li class="span4">
-        <div class="caption well well-large">
-            <h4 class="text-info">业绩报告</h4>
-            <p>本月业绩：<?php echo $performance_mouth_count; ?></p>
-            <p>累计总业绩：<?php echo $performance_count; ?></p>
-        </div>
-    </li>
-    <li class="span4">
-        <div class="caption well well-large">
-            <h4 class="text-info">任务报告</h4>
-            <p>您还有<?php echo $tip_task_user_row; ?>个任务没有完成<?php if($tip_task_user_row>0){ ?>，请尽快完成哦！<?php }else{ echo '；'; } ?></p>
-            <p>您累计完成了<?php echo $task_user_count; ?>个任务；</p>
-            <p>生产任务中心有<?php echo $task_count; ?>个任务等待完成。</p>
-        </div>
-    </li>
+<!--    <li class="span4">-->
+<!--        <div class="caption well well-large">-->
+<!--            <h4 class="text-info">业绩报告</h4>-->
+<!--            <p>本月业绩：--><?php //echo $performance_mouth_count; ?><!--</p>-->
+<!--            <p>累计总业绩：--><?php //echo $performance_count; ?><!--</p>-->
+<!--        </div>-->
+<!--    </li>-->
+<!--    <li class="span4">-->
+<!--        <div class="caption well well-large">-->
+<!--            <h4 class="text-info">任务报告</h4>-->
+<!--            <p>您还有--><?php //echo $tip_task_user_row; ?><!--个任务没有完成--><?php //if($tip_task_user_row>0){ ?><!--，请尽快完成哦！--><?php //}else{ echo '；'; } ?><!--</p>-->
+<!--            <p>您累计完成了--><?php //echo $task_user_count; ?><!--个任务；</p>-->
+<!--            <p>生产任务中心有--><?php //echo $task_count; ?><!--个任务等待完成。</p>-->
+<!--        </div>-->
+<!--    </li>-->
     <?php if($message_list){ foreach($message_list as $v){ $v_view = $oapost->view($v['id']); $v_user = $oauser->view_user($v['post_user']); ?>
     <li class="span4">
         <div class="caption well well-large">
@@ -92,7 +92,7 @@ $performance_mouth_count = $oapost->sum_fields('performance', $post_user, 'post_
     <?php } }else{ ?>
     <li class="span4">
         <div class="caption well well-large">
-            <h4 class="text-info">没有任何短消息</h4>
+            <h4 class="text-info">没有任何讯息</h4>
         </div>
     </li>
     <?php } ?>
