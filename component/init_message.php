@@ -219,7 +219,7 @@ $message_list = $oapost->view_list(null, null, null, 'private', 'message', $page
     </thead>
     <tbody id="message_list">
         <?php if($message_list){ foreach($message_list as $v){ ?>
-        <tr>
+        <tr <?php if(!$v['read_status']) echo 'class="danger"'; ?> >
             <td><?php echo $v['post_date']; ?></td>
             <td><?php $message_user = $oauser->view_user($v['post_user']); if($message_user){ echo '<a href="javascript:;'.$page_url.'&user='.$message_user['id'].'" target="_self">'.$message_user['user_name'].'</a>'; unset($message_user); } ?></td>
             <td><?php echo $v['post_title']; ?></td>

@@ -58,7 +58,7 @@ $oapost = new oapost($db, $ip_arr['id']);
  * 计算收件箱数量
  * @since 10
  */
-$tip_message_row = $oapost->view_list_row(null,null, null, 'private', 'message',$post_user);
+$tip_message_row = $oapost->view_list_row(null,null, null, 'private', 'message',$post_user,0);
 /**
  * 计算已发送数量
  * @since 10

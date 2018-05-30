@@ -20,7 +20,7 @@ $message_bool = false;
  * 获取消息列表
  * @since 1
  */
-$message_list = $oapost->view_list(null, null, null, 'private', 'message', 1, 6, 0, true, null, $post_user);
+$message_list = $oapost->view_list(null, null, null, 'private', 'message', 1, 6, 0, true, $post_user,0);
 
 /**
  * 获取系统消息
@@ -84,6 +84,7 @@ unset($system_message_list);
     <?php if($message_list){ foreach($message_list as $v){ $v_view = $oapost->view($v['id']); $v_user = $oauser->view_user($v['post_user']); ?>
     <li class="span4">
         <div class="caption well well-large">
+            <button type="button" class="close" aria-label="Close"><span class="close_button" aria-hidden="true" data_id="<?php echo $v['id']; ?>">&times;</span></button>
             <h4 class="text-info"><?php echo $v['post_title']; ?></h4>
             <p><?php if($v_view){ echo $v_view['post_content']; unset($v_view); } ?></p>
             <p class="text-right"><em>--- <?php if($v_user){ echo $v_user['user_name']; } ?></em></p>
@@ -106,5 +107,14 @@ unset($system_message_list);
         if (message != "") {
             msg(message_bool, message, message);
         }
+        $(".close_button").click(function(){
+            $.post("common/ajax_user.php",{
+                "user_id_read_status":$(this).attr('data_id')
+            },function(data){
+                msg(data,"编辑成功","编辑失败");
+                if(data == 2)
+                    tourl(1,"<?php echo $page_url; ?>");
+            });
+        })
     });
 </script>

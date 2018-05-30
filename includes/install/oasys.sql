@@ -102,6 +102,7 @@ CREATE TABLE `oa_posts` (
   `post_url` varchar(500) COLLATE utf8_bin DEFAULT NULL COMMENT '多媒体文件路径',
   `post_status` varchar(30) COLLATE utf8_bin NOT NULL DEFAULT 'public' COMMENT '发布状态',
   `post_meta` varchar(300) COLLATE utf8_bin DEFAULT NULL COMMENT '头信息',
+  `read_status` tinyint(1) NOT NULL DEFAULT '0' COMMENT '默认没阅读过',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_2` (`id`),
   KEY `post_ip` (`post_ip`),

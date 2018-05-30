@@ -87,11 +87,10 @@ class oapost {
      * @param int $sort 排序字段键值
      * @param boolean $desc 是否倒序
      * @param int $parent 上一级ID null-无条件|''-为非0|int-为某个值
-     * @param string $name 名称 null-等于空值|''-如果非空且空字符串则删除该条件|string-等于字符串
-     * @param string $pw 搜索密码或SHA1识别码
+     * @param int $readed 默认不做限制，1选择已读取的信息，0选择未读取的信息
      * @return boolean
      */
-    public function view_list($user = null, $title = null, $content = null, $status = 'public', $type = 'text', $page = 1, $max = 10, $sort = 7, $desc = true, $parent = null) {
+    public function view_list($user = null, $title = null, $content = null, $status = 'public', $type = 'text', $page = 1, $max = 10, $sort = 7, $desc = true, $parent = null,$readed = null) {
         $return = false;
         $sql_where = '';
         if ($title) {
@@ -119,8 +118,13 @@ class oapost {
         if ($status !== null) {
             $sql_where = $sql_where . ' `post_status` = :status AND';
         }
+
+        if ($readed !== null) {
+            $sql_where = $sql_where . ' `read_status` = '.$readed.' AND';
+        }
+
         $sql_desc = $desc ? 'DESC' : 'ASC';
-        $sql = 'SELECT `id`,`post_title`,`post_date`,`post_modified`,`post_ip`,`post_type`,`post_order`,`post_parent`,`post_user`,`post_password`,`post_url`,`post_status`,`post_meta` FROM `' . $this->table_name . '` WHERE ' . $sql_where . ' `post_type`=:type ORDER BY ' . $this->fields[$sort] . ' ' . $sql_desc . ' LIMIT ' . ($page - 1) * $max . ',' . $max;
+        $sql = 'SELECT `id`,`post_title`,`post_date`,`post_modified`,`post_ip`,`post_type`,`post_order`,`post_parent`,`post_user`,`post_password`,`post_url`,`post_status`,`read_status` FROM `' . $this->table_name . '` WHERE ' . $sql_where . ' `post_type`=:type ORDER BY ' . $this->fields[$sort] . ' ' . $sql_desc . ' LIMIT ' . ($page - 1) * $max . ',' . $max;
 
         $sth = $this->db->prepare($sql);
         if ($title) {
@@ -157,10 +161,10 @@ class oapost {
      * @param string $type 识别类型 message|text|addressbook|messageboard|file
      * @param int $parent 上一级ID null-无条件|''-为非0|int-为某个值
      * @param string $name 名称 null-等于空值|''-如果非空且空字符串则删除该条件|string-等于字符串
-     * @param string $pw 搜索密码或SHA1识别码
+     * @param int $readed 默认不做限制，1选择已读取的信息，0选择未读取的信息
      * @return boolean
      */
-    public function view_list_row($user = null, $title = null, $content = null, $status = 'public', $type = 'text', $parent = null) {
+    public function view_list_row($user = null, $title = null, $content = null, $status = 'public', $type = 'text', $parent = null,$readed = null) {
 
         $return = false;
         $sql_where = '';
@@ -194,6 +198,11 @@ class oapost {
         if ($status !== null) {
             $sql_where = $sql_where . ' `post_status` = :status AND';
         }
+
+        if ($readed !== null) {
+            $sql_where = $sql_where . ' `read_status` = '.$readed.' AND';
+        }
+
         $sql = 'SELECT COUNT(id) FROM `' . $this->table_name . '` WHERE ' . $sql_where . ' `post_type`=:type';
         $sth = $this->db->prepare($sql);
         if ($title) {
@@ -421,6 +430,22 @@ class oapost {
      */
     private function get_type($type) {
         return $this->type_values[$type];
+    }
+
+
+    /**
+     * 修改状态
+     * @param $fid 信息id
+     * @param $uid 用户id
+     * @return bool 返回布尔
+     */
+    public function readStatus($id,$uid){
+        $sql = "update `$this->table_name` set `read_status` = 1 where `read_status`=0 and `id` = $id and `post_parent` = $uid";
+        $sth = $this->db->prepare($sql);
+        if ($sth->execute() == true) {
+            return true;
+        }
+        else  return false;
     }
 
 }

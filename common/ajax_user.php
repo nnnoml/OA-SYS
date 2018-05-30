@@ -47,5 +47,22 @@ if (isset($_GET['del']) == true) {
     }
 }
 
+/**
+ * 修改文章状态
+ * @since 1
+ */
+if (isset($_POST['user_id_read_status']) == true) {
+    require(DIR_LIB . DS . 'oa-post.php');
+    $oapost = new oapost($db, $ip_arr['id']);
+
+    $id = $_POST['user_id_read_status'];
+    $user_id = $oauser->get_session_login();
+
+    $res = $oapost->readStatus($id,$user_id);
+    if ($res) {
+        die('2');
+    }
+}
+
 die('1');
 ?>
