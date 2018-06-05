@@ -60,6 +60,44 @@ if($oa->get_session_login())
                 margin-bottom: 15px;
                 padding: 7px 9px;
             }
+            /*
+             * @media only screen自适应
+             */
+            @media screen and (max-width:768px){ 
+                .container {
+                     width: 500px;
+                }
+               .form-signin {
+                    max-width: 100%;
+                    padding: 19px 29px 29px;
+                    margin: 0 auto 20px;
+                    /* margin-right: 205px; */
+                    /* background-color: #fff; */
+                    /* border: 1px solid #e5e5e5; */
+                    /* -webkit-border-radius: 5px; */
+                    -moz-border-radius: 5px;
+                    /* border-radius: 5px; */
+                    /* -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05); */
+                    -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                    /* box-shadow: 0 1px 2px rgba(0,0,0,.05); */
+                }
+                .btn-primary {
+                    color: #fff;
+                    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+                    background-color: #006dcc;
+                    background-image: -moz-linear-gradient(top,#08c,#04c);
+                    background-image: -webkit-gradient(linear,0 0,0 100%,from(#08c),to(#04c));
+                    background-image: -webkit-linear-gradient(top,#08c,#04c);
+                    background-image: -o-linear-gradient(top,#08c,#04c);
+                    background-image: linear-gradient(to bottom,#08c,#04c);
+                    background-repeat: repeat-x;
+                    border-color: #04c #04c #002a80;
+                    border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff0088cc',endColorstr='#ff0044cc',GradientType=0);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                    /*margin-left: 100px;*/
+                }
+            }
 
         </style>
         <link href="includes/css/bootstrap-responsive.css" rel="stylesheet">

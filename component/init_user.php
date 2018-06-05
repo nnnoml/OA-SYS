@@ -47,7 +47,54 @@ $userlist = $oauser->view_user_list($group, $page, $max, $sort, $desc);
 $group_list = $oauser->view_group_list(1, 999, 0, true);
 ?>
 
-<h2>用户管理</h2>
+<h2>用户管理</h2> 
+<button href="#doadd"  role="button" class="btn btn-success" 
+ data-toggle="modal" style="margin-bottom:10px;margin-left:85%;">
+<i class="icon-plus icon-white"></i> 添加</button>
+
+
+<table class="table1">
+     <tr>
+            <th><i class="icon-th-list"></i> ID</th>
+            <th><i class="icon-user"></i> 用户名</th>
+            <th><i class="icon-tags"></i> 昵称</th>
+            <th><i class="icon-envelope"></i> 邮箱</th>
+            <th><i class="icon-th"></i> 用户组</th>
+            <th><i class="icon-time"></i> 登录时间</th>
+            <th><i class="icon-globe"></i> 登录IP</th>
+            <th><i class="icon-asterisk"></i> 操作</th>
+        </tr>
+        <tbody class="user_list">
+         <?php
+        if($userlist){
+            foreach($userlist as $v){
+                $v_group = $oauser->view_group($v['user_group']);
+                $v_ip = $coreip->view($v['id']);
+            ?>
+        <tr>
+            <td><?php echo $v['id']; ?></td>
+            <td><?php echo $v['user_username']; ?></td>
+            <td><?php echo $v['user_name']; ?></td>
+            <td><?php echo $v['user_email']; ?></td>
+            <td><?php echo $v_group['group_name']; ?></td>
+            <td><?php echo $v['user_login_date']; ?></td>
+            <td><?php  echo $v_ip['ip_addr']; ?></td>
+            <td><div class="btn-group">
+            <button href="#edit" role="button" class="btn" data-toggle="modal"><i class="icon-pencil"></i> 编辑</button>
+            <button href="#del" class="btn btn-danger">
+            <i class="icon-trash icon-white"></i> 删除</button>
+            </div>
+           
+           
+            </td>
+        </tr>
+        <?php } } ?>
+        </tbody>
+
+</table>
+
+
+
 <table class="table table-hover table-bordered table-striped">
     <thead>
         <tr>
@@ -76,20 +123,14 @@ $group_list = $oauser->view_group_list(1, 999, 0, true);
             <td><?php echo $v_group['group_name']; ?></td>
             <td><?php echo $v['user_login_date']; ?></td>
             <td><?php  echo $v_ip['ip_addr']; ?></td>
-            <td><div class="btn-group"><button href="#edit" role="button" class="btn" data-toggle="modal"><i class="icon-pencil"></i> 编辑</button><button href="#del" class="btn btn-danger"><i class="icon-trash icon-white"></i> 删除</button></div></td>
+            <td><div class="btn-group">
+            <button href="#edit" role="button" class="btn" data-toggle="modal"><i class="icon-pencil"></i> 编辑</button><button href="#del" class="btn btn-danger"><i class="icon-trash icon-white"></i> 删除</button></div></td>
         </tr>
         <?php } } ?>
-        <tr class="info">
-            <td></td>
-            <td><div class="input-prepend"><span class="add-on"><i class="icon-user"></i></span><input type="text" class="input-small" id="add_username" placeholder="用户名"></div></td>
-            <td><div class="input-prepend"><span class="add-on"><i class="icon-star"></i></span><input type="password" class="input-small" id="add_password" placeholder="密码"></div></td>
-            <td><div class="input-prepend"><span class="add-on"><i class="icon-envelope"></i></span><input type="text" class="input-small" id="add_email" placeholder="邮箱"></div></td>
-            <td><div class="input-prepend"><span class="add-on"><i class="icon-th"></i></span><select class="input-small" id="add_group"><?php if($group_list){ foreach($group_list as $v){ ?><option value="<?php echo $v['id']; ?>"><?php echo $v['group_name']; ?></option><?php } } ?></select></div></td>
-            <td><div class="input-prepend"><span class="add-on">@</span><input type="text" id="add_name" class="input-small" placeholder="昵称"></div></td>
-            <td><?php  echo $ip_arr['addr']; ?></td>
-            <td><button href="#add" type="submit" class="btn btn-success" type="button"><i class="icon-plus icon-white"></i> 添加</button></td>
-        </tr>
+       
     </tbody>
+    <!-- 添加框-->
+
 </table>
 
 <!-- 页码 -->
@@ -101,6 +142,9 @@ $group_list = $oauser->view_group_list(1, 999, 0, true);
         <a href="<?php echo $page_url.'&page='.$page_next; ?>">下一页 &rarr;</a>
     </li>
 </ul>
+
+ 
+
 
 <!-- 编辑框 -->
 <div id="edit" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -159,13 +203,41 @@ $group_list = $oauser->view_group_list(1, 999, 0, true);
         <button href="#edit_save" class="btn btn-primary"><i class="icon-ok icon-white"></i> 保存修改</button>
     </div>
 </div>
-
+</div>
+<!-- 添加框-->
+<div id="doadd" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">添加用户</h3>
+    </div>
+      <div class="input-prepend"><span class="add-on"><i class="icon-user"></i></span><input type="text" class="input-small" id="doadd_username" placeholder="用户名"></div><br/>
+      <div class="input-prepend"><span class="add-on"><i class="icon-star"></i></span><input type="password" class="input-small" id="doadd_password" placeholder="密码"></div><br/>
+      <div class="input-prepend"><span class="add-on"><i class="icon-envelope"></i></span>
+      <input type="text" class="input-small" id="doadd_email" placeholder="邮箱">
+      </div>
+      <br/>
+      
+      <div class="input-prepend">
+     <span class="add-on"><i class="icon-th"></i></span>
+     <select class="input-small" id="doadd_group" style="width:185px;"><?php if($group_list){ foreach($group_list as $v){ ?><option value="<?php echo $v['id']; ?>"><?php echo $v['group_name']; ?></option><?php } } ?></select></div><br/>
+     <div class="input-prepend"><span class="add-on">@</span>
+      <input type="text" id="doadd_name" class="input-small" placeholder="昵称"></div>
+       <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true"><i class="icon-remove"></i> 关闭</button>
+        <button href="#add_save" class="btn btn-primary"><i class="icon-ok icon-white"></i> 添加</button>
+    </div>
+     <!--  <div class="modal-footer">
+        <button href="#add" type="submit" class="btn btn-success" type="button"><i class="icon-plus icon-white"></i> 添加</button>
+    </div> -->
+  
+</div> 
 <!-- Javascript -->
 <script>
     $(document).ready(function(){
         var ajax_page = "common/ajax_user.php";
         //添加用户
         $("button[href='#add']").click(function(){
+            //alert("1111");
             $.post(ajax_page,{
                 "add_username":$("#add_username").val(),
                 "add_password":$("#add_password").val(),
@@ -177,6 +249,22 @@ $group_list = $oauser->view_group_list(1, 999, 0, true);
                 if(data == 2)
                     tourl(500,"<?php echo $page_url; ?>");
             });
+        });
+        //保存用户
+    $("button[href='#add_save']").click(function(){
+         //alert("1111");
+            $.post(ajax_page,{
+                "add_username":$("#doadd_username").val(),
+                "add_password":$("#doadd_password").val(),
+                "add_email":$("#doadd_email").val(),
+                "add_name":$("#doadd_name").val(),
+                "add_group":$("#doadd_group").val()
+            },function(data){
+                msg(data,"添加用户成功！","无法添加用户，请检查您输入的用户名、密码、邮箱等信息是否正确。");
+                if(data == 2)
+                    tourl(500,"<?php echo $page_url; ?>");
+            });
+           
         });
         //编辑用户
         $("button[href='#edit']").click(function(){
@@ -227,6 +315,12 @@ $group_list = $oauser->view_group_list(1, 999, 0, true);
                     $(ev).parent("tr").remove();
                 }
             });
+        });
+
+         //添加用户
+       $("button[href='#doadd']").click(function(){
+            var ev = $(this).parent().parent();
+           $("#doadd").data("edit_x",ev);
         });
     });
 </script>

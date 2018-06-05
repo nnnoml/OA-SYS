@@ -208,6 +208,31 @@ $message_list = $oapost->view_list($post_user, null, null, 'private', 'message',
 ?>
 <!-- 管理表格 -->
 <h2>已发送</h2>
+<table class="table1">
+  
+        <tr>
+            <th><i class="icon-calendar"></i> 时间</th>
+            <th><i class="icon-user"></i> 收件人</th>
+            <th><i class="icon-comment"></i> 消息</th>
+            <th><i class="icon-file"></i> 文件</th>
+            <th><i class="icon-asterisk"></i> 操作</th>
+        </tr>
+   
+    <tbody id="message_list">
+        <?php if($message_list){ foreach($message_list as $v){ ?>
+        <tr>
+            <td><?php echo $v['post_date']; ?></td>
+            <td><?php $message_user = $oauser->view_user($v['post_parent']); if($message_user){ echo '<a href="javascript:;'.$page_url.'&user='.$message_user['id'].'" target="_self">'.$message_user['user_name'].'</a>'; unset($message_user); } ?></td>
+            <td><?php echo $v['post_title']; ?></td>
+
+            <td><div class="btn-group"><a href="../common/file_download.php?id=<?php echo $v['id']; ?>" class="btn"><i class="icon-file"></i> 下载</a></div></td>
+
+            <td><div class="btn-group"><a href="<?php echo $page_url.'&view='.$v['id']; ?>" class="btn" target="_self"><i class="icon-search"></i> 详情</a><a href="<?php echo $page_url.'&user='.$v['post_user']; ?>" class="btn" target="_self"><i class="icon-envelope"></i> 回复</a><a href="<?php echo $page_url.'&del='.$v['id']; ?>" class="btn btn-danger" target="_self"><i class="icon-trash icon-white"></i> 删除</a></div></td>
+        </tr>
+        <?php } } ?>
+    </tbody>
+</table>
+
 <table class="table table-hover table-bordered table-striped">
     <thead>
         <tr>

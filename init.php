@@ -110,12 +110,27 @@ $tip_send_row = $oapost->view_list_row($post_user,null, null, 'private', 'messag
         <!-- Le styles -->
         <link href="includes/css/bootstrap.css" rel="stylesheet">
         <style type="text/css">
+        .span9 .table1{
+            display:none;
+        }
+
             body {
                 padding-top: 60px;
                 padding-bottom: 40px;
             }
             .sidebar-nav {
                 padding: 9px 0;
+            }
+            .btn .btn-success{
+                width:50px;
+            }
+            #doadd input{
+                width:80%;
+
+            }
+            #doadd .input-prepend{
+                margin-left:30px;
+                margin-top:10px;
             }
 
             @media (max-width: 980px) {
@@ -126,6 +141,148 @@ $tip_send_row = $oapost->view_list_row($post_user,null, null, 'private', 'messag
                     padding-right: 5px;
                 }
             }
+
+             @media screen and (max-width:768px){
+                .span9 .table {
+                    display:none;
+                }
+                .span9 .table1{
+                    display:block;
+                }
+
+                .span9 .table1{
+                    width:100%;
+                    height:auto;
+                    border: 1px solid #ddd;
+                      text-align:center;
+                }
+                
+                .span9 .table1 tr th{
+                    border-left: 1px solid #ddd;
+                    font-size:10px;
+                    text-align:center;
+                    height:20px;
+                }
+                 .span9 .table1 .user_list{
+                    border: 1px solid #ddd;
+                    font-size:10px;
+                    text-align:center;
+
+                 }
+                 .span9 .table1 .user_list tr td{
+                    border:1px solid #ddd;
+                    font-size:8px;
+                    height:auto;
+                    text-align:center;
+
+                    
+                 }
+                 .btn-group {
+                    position: relative;
+                    display: inline-block;
+                    font-size: 0;
+                    white-space: nowrap;
+                    vertical-align: middle;
+                    margin-top: -25px;
+                }
+                .btn-group>.btn, .btn-group>.dropdown-menu, .btn-group>.popover {
+                     font-size: 8px;
+               }
+               .btn-danger {
+                    color: #fff;
+                    text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+                    background-color: #da4f49;
+                    background-image: -moz-linear-gradient(top,#ee5f5b,#bd362f);
+                    background-image: -webkit-gradient(linear,0 0,0 100%,from(#ee5f5b),to(#bd362f));
+                    background-image: -webkit-linear-gradient(top,#ee5f5b,#bd362f);
+                    background-image: -o-linear-gradient(top,#ee5f5b,#bd362f);
+                    background-image: linear-gradient(to bottom,#ee5f5b,#bd362f);
+                    background-repeat: repeat-x;
+                    border-color: #bd362f #bd362f #802420;
+                    border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+                    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffee5f5b',endColorstr='#ffbd362f',GradientType=0);
+                    filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+                }
+                .btn{
+                    padding:0px;
+                }
+                .btn-group>.btn+.btn {
+                    margin-left: 5px;
+                    width: 50px;
+                    margin-top: 60px;
+                    margin-left: -50px;
+                }
+     
+                .span9 .table1 .info .input-prepend input{
+                     width:70px;
+
+              }
+                .span9 .table1 .info .input-prepend select{
+                     width:110px;
+
+              }
+             
+                .btn-danger{
+                    width:50px;
+             }
+                .btn-group>.btn:first-child {
+                     margin-left: 0;
+                     -webkit-border-bottom-left-radius: 4px;
+                     border-bottom-left-radius: 4px;
+                     -webkit-border-top-left-radius: 4px;
+                     border-top-left-radius: 4px;
+                     -moz-border-radius-bottomleft: 4px;
+                     -moz-border-radius-topleft: 4px;
+                     width: 50px;
+        }
+                .span9 .table1 #message_list tr td {
+                     border: 1px solid #ddd;
+                     font-size: 8px;
+                     height: auto;
+                     text-align: center;
+                }
+            
+                .span9 .table1 tbody tr th{
+                     border: 1px solid #ddd;
+            }
+                .span9 .table1 #group_list tr td {
+                     border: 1px solid #ddd;
+                     font-size: 8px;
+                     height: auto;
+                     text-align: center;
+                }
+            
+               .span9 .table1  #message_list .danger{
+
+                      background-color: #f2dede;
+                }
+               .table1 tbody tr.info>td {
+                    background-color: #d9edf7;
+          }
+         
+               .input-append, .input-prepend {
+                    display: inline-block;
+                    margin-bottom: 10px;
+                    font-size: 0;
+                    white-space: nowrap;
+                    vertical-align: middle;
+                    margin-top: 5px
+            }
+
+                .span9 .table1 tr {
+                  
+                  
+                    width: 50px;
+
+        }
+               .span9 .table1 tr th {
+                       width: 80px;
+                
+
+        }
+         
+
+        }
         </style>
         <link href="includes/css/bootstrap-responsive.css" rel="stylesheet">
 

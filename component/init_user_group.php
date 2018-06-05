@@ -42,6 +42,36 @@ $page_next = $page+1;
 $group_list = $oauser->view_group_list($page,$max);
 ?>
 <h2>用户组管理</h2>
+<table class="table1">
+        <tr>
+            <th><i class="icon-th-list"></i> ID</th>
+            <th><i class="icon-th"></i> 用户组名称</th>
+            <th><i class="icon-briefcase"></i> 权限</th>
+            <th><i class="icon-info-sign"></i> 状态</th>
+            <th><i class="icon-asterisk"></i> 操作</th>
+        </tr>
+   
+    <tbody id="group_list">
+            <?php if($group_list){ foreach($group_list as $k=>$v){ ?>
+            <tr>
+            <td><?php echo $v['id']; ?></td>
+            <td><?php echo $v['group_name']; ?></td>
+            <td><?php if($v['group_power'] == 'admin'){ echo '管理员'; }else{ echo '普通用户'; } ?></td>
+            <td><?php echo $v['group_status'] ? '正常':'已禁用'; ?></td>
+            <td><div class="btn-group"><button href="#group_edit" role="button" class="btn" data-toggle="modal"><i class="icon-pencil"></i> 编辑</button><button class="btn btn-danger"><i class="icon-trash icon-white"></i> 删除</button></div></td>
+        </tr>
+
+             <?php } } ?>
+             <tr class="info">
+            <td></td>
+            <td><div class="input-prepend"><span class="add-on"><i class="icon-th"></i></span><input type="text" id="add_name" placeholder="组名称"></div></td>
+            <td><div class="input-prepend"><span class="add-on"><i class="icon-briefcase"></i></span><select id="add_power"><option value="admin">管理员</option><option value="normal">普通用户</option></select></div></td>
+            <td>启用</td>
+            <td><button href="#add" type="submit" class="btn btn-success" type="button"><i class="icon-plus icon-white"></i> 添加</button></td>
+        </tr>
+    </tbody>
+</table>
+
 <table class="table table-hover table-bordered table-striped">
     <thead>
         <tr>

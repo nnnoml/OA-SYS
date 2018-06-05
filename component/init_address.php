@@ -42,6 +42,38 @@ $userlist = $oauser->view_user_list(null, $page, $max, $sort, $desc);
 ?>
 
 <h2>通讯录</h2>
+<table class="table1">
+  
+        <tr>
+            <th><i class="icon-th-list"></i> ID</th>
+            <th><i class="icon-user"></i> 用户名</th>
+            <th><i class="icon-tags"></i> 昵称</th>
+            <th><i class="icon-envelope"></i> 邮箱</th>
+            <th><i class="icon-th"></i> 用户组</th>
+        </tr>
+
+    <tbody class="user_list">
+        <?php
+        if($userlist){
+            foreach($userlist as $v){
+                if($v['user_username']=='admin') continue;
+
+                $v_group = $oauser->view_group($v['user_group']);
+                $v_ip = $coreip->view($v['id']);
+            ?>
+        <tr>
+            <td><?php echo $v['id']; ?></td>
+            <td><?php echo $v['user_username']; ?></td>
+            <td><?php echo $v['user_name']; ?></td>
+            <td><?php echo $v['user_email']; ?></td>
+            <td><?php echo $v_group['group_name']; ?></td>
+        </tr>
+        <?php } } ?>
+    </tbody>
+</table>
+
+
+
 <table class="table table-hover table-bordered table-striped">
     <thead>
         <tr>
